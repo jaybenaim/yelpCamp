@@ -1,17 +1,19 @@
 const   express      = require('express'),  
         bodyParser   = require('body-parser'),
-        mongoose     = require('mongoose'), 
+        mongoose     = require('mongoose'),
+        methodOverride  = require("method-override"),
         Campground   = require("./models/campground"),
         Comment      = require('./models/comment'),
         seedDB       = require('./seeds'),
         app          = express()
  
-// seedDB(); 
+//seedDB(); 
 mongoose.connect("mongodb://localhost/yelp_camp", { useNewUrlParser: true, useFindAndModify: false }); 
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true})); 
 app.set("view engine", "ejs"); 
-app.use(express.static("public")); 
-
+app.use(express.static(__dirname + "/public")); 
+app.use(methodOverride("_method")); 
 
  
 // INDEX ROUTE
@@ -63,18 +65,20 @@ app.get("/campgrounds/:id", function(req,res) {
     });    
 }); 
 // COMMENTS ROUTE 
-app.get("/campgrounds/:id/comments/new", function(req,res){ 
+app.get("/campgrounds/:id/comments/new", function(req, res){ 
     Campground.findById(req.params.id, function(err, campground){ 
         if(err){ 
             console.log(err); 
         } else { 
             res.render("comments/new", {campground: campground}); 
         }
-    })
+    });
    
 }); 
+
+
 // SEND FORM TO 
-app.post("/campgrounds/:id/comments", function(req, res){ 
+app.post("/campgrounds/:id", function(req, res){ 
     Campground.findById(req.params.id, function(err, campground){ 
         if(err){ 
             console.log(err);
@@ -86,7 +90,7 @@ app.post("/campgrounds/:id/comments", function(req, res){
                 } else { 
                     campground.comments.push(comment); 
                     campground.save(); 
-                    res.redirect('/campgrounds/' + campground._id); 
+                    res.redirect( "/campgrounds/" + campground._id); 
                 }
             }); 
         }
