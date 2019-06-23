@@ -1,7 +1,7 @@
 const express   = require("express"); 
 const router    = express.Router();
 const passport  = require('passport'); 
-var User    = require("../models/user")
+var User        = require("../models/user")
 
 // ROOT ROUTE
 router.get("/", function(req,res){ 
@@ -47,4 +47,11 @@ req.logout();
 res.redirect('/campgrounds'); 
 }); 
 
+
+function isLoggedIn(req, res, next){ 
+    if(req.isAuthenticated()){ 
+        return next(); 
+    } 
+        res.redirect("/login");
+    }; 
 module.exports = router; 
