@@ -37,11 +37,31 @@ router.post("/", isLoggedIn,  function(req, res){
             }); 
         }
     });
-    
 });
 
+// EDIT  Comments 
+router.get("/:comment_id/edit", function(req, res){ 
+    Comment.findById(req.params.comment_id, function(err, foundComment){ 
+        if(err){ 
+            res.redirect("back"); 
+        } else { 
+            res.render("comments/edit", {  campground_id: req.params.id, comment: foundComment}); 
+        }
+    }); 
+}); 
 
+// UPDATE Comments 
+router.put("/:comment_id", function(req,res){ 
+    Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, function(err, foundComment){ 
+        if(err){ 
+            res.redirect("back"); 
+        } else { 
+            res.redirect("/campgrounds/" + req.params.id); 
+        }
+    }); 
+}); 
 
+// MIDDLEWARE
 function isLoggedIn(req, res, next){ 
     if(req.isAuthenticated()){ 
         return next(); 
