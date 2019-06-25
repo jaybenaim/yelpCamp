@@ -9,7 +9,7 @@ router.get("/", function(req,res) {
         if(err) { 
             console.log(err); 
         } else { 
-            res.render("campgrounds/index", { campgrounds: allcampgrounds, currentUser: req.user});
+            res.render("campgrounds/index", { campgrounds: allcampgrounds, currentUser: req.user, page: 'campgrounds'});
         }
     });
 });
@@ -19,6 +19,7 @@ router.post("/", middleware.isLoggedIn, function(req,res) {
     
     var name = req.body.name; 
     var image = req.body.image; 
+    var price = req.body.price; 
     var desc = req.body.description; 
     var author = { 
         id: req.user._id, 
@@ -54,7 +55,7 @@ router.get("/:id", function(req,res) {
 // EDIT ROUTE 
 router.get("/:id/edit", middleware.checkCampgroundOwnership, function(req,res){ 
         Campground.findById(req.params.id, function(err, foundCampground) { 
-                    res.render("campgrounds/edit", {campground: foundCampground});
+            res.render("campgrounds/edit", {campground: foundCampground});
 }); 
 }); 
 

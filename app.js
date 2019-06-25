@@ -1,6 +1,7 @@
 const   express          = require('express'),  
         bodyParser       = require('body-parser'),
         mongoose         = require('mongoose'),
+        flash            = require('connect-flash'),
         methodOverride   = require("method-override"),
         Campground       = require("./models/campground"),
         Comment          = require('./models/comment'),
@@ -21,7 +22,10 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs"); 
 app.use(express.static(__dirname + "/public")); 
 app.use(methodOverride("_method")); 
+app.use(flash()); 
 // seedDB(); 
+
+app.locals.moment = require('moment');
 
 // PASSPORT CONFIG 
 app.use(require("express-session")({
@@ -33,9 +37,11 @@ app.use(require("express-session")({
 app.use(passport.initialize()); 
 app.use(passport.session()); 
 
-// use currentUser in all routes 
+// use currentUser and message in all routes 
 app.use(function(req, res, next){ 
     res.locals.currentUser = req.user;
+    res.locals.error = req.flash("error"); 
+    res.locals.success = req.flash("success"); 
     next();  
 });  
 
