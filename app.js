@@ -1,4 +1,4 @@
-const   express          = require('express'),  
+const   express          = require('express'), 
         bodyParser       = require('body-parser'),
         mongoose         = require('mongoose'),
         flash            = require('connect-flash'),
@@ -16,8 +16,11 @@ const   commentRoutes    = require('./routes/comments'),
         campgroundRoutes = require('./routes/campgrounds'), 
         indexRoutes       = require('./routes/index'); 
 
+        
 
-mongoose.connect("mongodb://localhost/yelp_camp", { useNewUrlParser: true, useFindAndModify: false }); 
+  
+ //mongoose.connect("mongodb://localhost/yelp_camp", { useNewUrlParser: true, useFindAndModify: false }); 
+ 
 app.use(bodyParser.urlencoded({extended: true})); 
 app.set("view engine", "ejs"); 
 app.use(express.static(__dirname + "/public")); 
@@ -36,6 +39,17 @@ app.use(require("express-session")({
 
 app.use(passport.initialize()); 
 app.use(passport.session()); 
+
+const MongoClient      = require('mongodb').MongoClient; 
+const uri = "mongodb://jaybenaim:Jb100831792@yelpcamp-aevmq.mongodb.net/test?retryWrites=true&w=majority";
+const client = new MongoClient(uri, { useNewUrlParser: true });
+
+client.connect(err => {
+  // perform actions on the collection object
+  
+  client.close();
+});
+// mongoose.connect("mongodb+srv://jaybenaim:Jb100831792%21@yelpcamp-aevmq.mongodb.net/test?retryWrites=true&w=majority", { useNewUrlParser: true, useFindAndModify: false });
 
 // use currentUser and message in all routes 
 app.use(function(req, res, next){ 
