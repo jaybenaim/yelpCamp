@@ -19,7 +19,7 @@ const   commentRoutes    = require('./routes/comments'),
         
 
   
- //mongoose.connect("mongodb://localhost/yelp_camp", { useNewUrlParser: true, useFindAndModify: false }); 
+ mongoose.connect("mongodb://localhost/yelp_camp", { useNewUrlParser: true, useFindAndModify: false }); 
  
 app.use(bodyParser.urlencoded({extended: true})); 
 app.set("view engine", "ejs"); 
@@ -29,6 +29,18 @@ app.use(flash());
 // seedDB(); 
 
 app.locals.moment = require('moment');
+/* 
+const MongoClient      = require('mongodb').MongoClient; 
+const uri = "mongodb+srv://jaybenaim:Jb100831792@yelpcamp-aevmq.mongodb.net/test?retryWrites=true&w=majority";
+const client = new MongoClient(uri, { useNewUrlParser: true });
+
+client.connect(err => {
+  // perform actions on the collection object
+  
+  client.close();
+});
+// mongoose.connect("mongodb+srv://jaybenaim:Jb100831792%21@yelpcamp-aevmq.mongodb.net/test?retryWrites=true&w=majority", { useNewUrlParser: true, useFindAndModify: false });
+*/ 
 
 // PASSPORT CONFIG 
 app.use(require("express-session")({
@@ -39,17 +51,6 @@ app.use(require("express-session")({
 
 app.use(passport.initialize()); 
 app.use(passport.session()); 
-
-const MongoClient      = require('mongodb').MongoClient; 
-const uri = "mongodb://jaybenaim:Jb100831792@yelpcamp-aevmq.mongodb.net/test?retryWrites=true&w=majority";
-const client = new MongoClient(uri, { useNewUrlParser: true });
-
-client.connect(err => {
-  // perform actions on the collection object
-  
-  client.close();
-});
-// mongoose.connect("mongodb+srv://jaybenaim:Jb100831792%21@yelpcamp-aevmq.mongodb.net/test?retryWrites=true&w=majority", { useNewUrlParser: true, useFindAndModify: false });
 
 // use currentUser and message in all routes 
 app.use(function(req, res, next){ 

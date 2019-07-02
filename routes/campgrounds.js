@@ -3,8 +3,9 @@ var router      = express.Router();
 var Campground  = require('../models/campground');
 var middleware  = require('../middleware'); 
 
+//INDEX 
 router.get("/", function(req,res) { 
-    // get all campgrounds from DB then render file 
+     // get all campgrounds from DB then render file 
     Campground.find({}, function(err, allcampgrounds){ 
         if(err) { 
             console.log(err); 
@@ -12,6 +13,7 @@ router.get("/", function(req,res) {
             res.render("campgrounds/index", { campgrounds: allcampgrounds, currentUser: req.user, page: 'campgrounds'});
         }
     });
+
 });
 
 // CREATE ROUTE - add new campground to DB 
@@ -81,6 +83,8 @@ router.delete("/:id", middleware.checkCampgroundOwnership, function(req, res){
      }
 }); 
 }); 
-
+function escapeRegex(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+};
 
 module.exports = router; 
